@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6"
+    },
+    "include": [
+        "src/**/*"
+    ]
+}
+//git config --global user.name "yruano"
+//git config --global user.email "ckrmidjskk@naver.com"
+// html canvas api
