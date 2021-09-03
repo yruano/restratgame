@@ -46,3 +46,12 @@ function wall(x, y, radius) {
     // y += dy;
     return result;
 }
+
+//랜덤 스폰
+function randomspawn(radius) {
+    const spawnX = Math.floor(Math.random() * (canvas.width - radius)) + radius;
+    const spawnY = Math.floor(Math.random() * (canvas.height - radius)) + radius;
+    return { x: spawnX, y: spawnY };
+}
+
+//시간

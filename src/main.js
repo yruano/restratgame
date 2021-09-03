@@ -68,24 +68,56 @@ class Enemy {
         this.x += dir.x * speed;
         this.y += dir.y * speed;
     }
-    randomspawn() {
+}
 
+class Timer {
+    constructor(interval, fn, countr) {
+        this.interval = interval;
+        this.fn = fn;
+        this.countr = countr
+        this.timer = 0;
+        this.val = 5;
+    }
+    spawntime() {
+        this.timer += deltatime;
+        if (this.timer >= this.interval) {
+            this.fn();
+            this.timer = 0;
+            this.countr += 1;
+        }
+        if (this.countr == val) {
+            this.interval -= 1;
+            val -= 1;
+            this.countr = 0;
+        }
     }
 }
 
+function spawnEnemy() {
+    let enemy = new Enemy(0, 0);
+    let spawnPos = randomspawn(enemy.radius);
+    enemy.x = spawnPos.x;
+    enemy.y = spawnPos.y;
+    return enemy;
+}
+
 const player = new Player();
-const enemies = [
-    new Enemy(100, 100),
-    new Enemy(200, 200),
-    new Enemy(300, 300),
-    new Enemy(400, 400),
-];
+const enemies = [];
+
+const spawntime = new Timer(5, () => { enemies.push(spawnEnemy()); console.log('들어와'); })
+
+let deltatime = 0;
+let calctime = 0;
+let savetime = 0;
 
 (function loop() {
+    deltatime = (performance.now() - calctime) / 1000;
     gl.clearRect(0, 0, canvas.width, canvas.height);
 
     player.processInput();
     player.draw();
+
+    spawntime.spawntime();
 
     for (const enemy of enemies) {
         player.processCollision(enemy);
@@ -93,5 +125,6 @@ const enemies = [
         enemy.draw();
     }
 
+    calctime = performance.now();
     requestAnimationFrame(loop);
 })();
