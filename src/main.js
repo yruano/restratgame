@@ -5,7 +5,7 @@ class Player {
     this.y = center.y;
     this.radius = 10;
     this.moveSpeed = 5;
-    this.color = '#000000';
+    this.color = '#ffffff';
     //      플레이어 움직임
     this.keyUp = false;
     this.keyDown = false;
@@ -86,15 +86,11 @@ class Timer {
       this.countr += 0.2;
     }
     if (this.countr >= this.val) {
-      if (this.val <= 0.5) {
-        if (this.interval <= 0.1) {
-          return;
-        }
-        this.interval -= 0.01;
+      if (this.val <= 1) {
         console.log(this.interval);
         return;
       }
-      this.interval -= 0.8;
+      this.interval -= 0.86;
       this.val -= 0.4;
       this.countr = 0;
       console.log(this.interval);
