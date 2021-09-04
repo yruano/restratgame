@@ -42,7 +42,6 @@ class Player {
     const dist = distance(player.x, player.y, enemy.x, enemy.y);
     if (dist <= player.radius + enemy.radius) {
       gameOver();
-      console.log("hit");
     }
   }
 }
@@ -59,7 +58,6 @@ class Enemy {
   // 적을 그리기위해 draw를 가져옴
   draw() {
     drawCircle(this.x, this.y, this.radius, this.color);
-    //wall(this.x, this.y, this.radius);
   }
   follow(target) {
     const dir = direction(this.x, this.y, target.x, target.y);
@@ -121,6 +119,7 @@ let savetime = 0;
 
   player.processInput();
   player.draw();
+  wall(player.x, player.y, player.radius);
 
   spawntime.spawntime();
 

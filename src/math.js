@@ -31,19 +31,17 @@ function direction(x1, y1, x2, y2) {
 
 function wall(x, y, radius) {
   const result = { x: x, y: y };
-  // let dx = 2;
-  // let dy = -2;
-  if (x + radius > canvas.width - radius) {
-    result.x = canvas.width - radius;
-    // dx = -dx;
+  let dx = 2;
+  let dy = -2;
+  if (x + dx > canvas.width - radius || x + dx < radius) {
+    dx = -dx;
   }
-  if (y + radius > canvas.height - radius) {
-    result.y = canvas.height - radius;
-    // dy = -dy;
+  if (y + dy > canvas.height - radius || y + dy < radius) {
+    dy = -dy;
   }
 
-  // x += dx;
-  // y += dy;
+  result.x = dx;
+  result.y = dy;
   return result;
 }
 
