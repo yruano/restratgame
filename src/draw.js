@@ -12,5 +12,4 @@ function gameOver() {
   gl.font = '100px Arial';
   gl.fillStyle = 'red';
   gl.fillText('GAME OVER', center.x, center.y);
-  //cancelAnimationFrame(requestId);
 }

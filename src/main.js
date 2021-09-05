@@ -1,3 +1,7 @@
+class GameState {
+  static gameOver = false;
+}
+
 // 플레이어
 class Player {
   constructor() {
@@ -27,21 +31,37 @@ class Player {
   }
   // 플레이어를 그리기위해 draw를 가져옴
   draw() {
-    let { x, y } = wall(this.x, this.y, this.radius);
-    this.x = x;
-    this.y = y;
     drawCircle(this.x, this.y, this.radius, this.color);
   }
   processInput() {
-    this.keyUp && (player.y -= player.moveSpeed);
-    this.keyDown && (player.y += player.moveSpeed);
-    this.keyRight && (player.x += player.moveSpeed);
-    this.keyLeft && (player.x -= player.moveSpeed);
+    if (player.y <= 0 + this.radius) {
+      this.keyUp && (player.y = 0 + this.radius);
+    } else {
+      this.keyUp && (player.y -= player.moveSpeed);
+    }
+
+    if (player.y >= canvas.height - this.radius) {
+      this.keyDown && (player.y = canvas.height - this.radius);
+    } else {
+      this.keyDown && (player.y += player.moveSpeed);
+    }
+
+    if (player.x >= canvas.width - this.radius) {
+      this.keyRight && (player.x = canvas.width - this.radius);
+    } else {
+      this.keyRight && (player.x += player.moveSpeed);
+    }
+
+    if (player.x <= 0 + this.radius) {
+      this.keyLeft && (player.x = 0 + this.radius);
+    } else {
+      this.keyLeft && (player.x -= player.moveSpeed);
+    }
   }
   processCollision(enemy) {
     const dist = distance(player.x, player.y, enemy.x, enemy.y);
     if (dist <= player.radius + enemy.radius) {
-      gameOver();
+      GameState.gameOver = true;
     }
   }
 }
@@ -68,34 +88,6 @@ class Enemy {
   }
 }
 
-class Timer {
-  constructor(interval, fn, countr) {
-    this.interval = interval;
-    this.fn = fn;
-    this.countr = countr
-    this.timer = 0;
-    this.val = 2;
-  }
-  spawntime() {
-    this.timer += deltatime;
-    if (this.timer >= this.interval) {
-      this.fn();
-      this.timer = 0;
-      this.countr += 0.2;
-    }
-    if (this.countr >= this.val) {
-      if (this.val <= 1) {
-        console.log(this.interval);
-        return;
-      }
-      this.interval -= 0.86;
-      this.val -= 0.4;
-      this.countr = 0;
-      console.log(this.interval);
-    }
-  }
-}
-
 function spawnEnemy() {
   let enemy = new Enemy(0, 0);
   let spawnPos = randomspawn(enemy.radius);
@@ -113,20 +105,39 @@ let deltatime = 0;
 let calctime = 0;
 let savetime = 0;
 
-(function loop() {
-  deltatime = (performance.now() - calctime) / 1000;
-  gl.clearRect(0, 0, canvas.width, canvas.height);
+
+function loopGamePlay(deltatime) {
+  spawntime.spawntime();
 
   player.processInput();
   player.draw();
-  wall(player.x, player.y, player.radius);
-
-  spawntime.spawntime();
 
   for (const enemy of enemies) {
     player.processCollision(enemy);
     enemy.follow(player);
     enemy.draw();
+  }
+}
+
+function loopGameOver(deltatime) {
+  player.draw();
+
+  for (const enemy of enemies) {
+    enemy.draw();
+  }
+
+  gameOver();
+}
+
+
+(function loop() {
+  deltatime = (performance.now() - calctime) / 1000;
+  gl.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (GameState.gameOver) {
+    loopGameOver(deltatime);
+  } else {
+    loopGamePlay(deltatime);
   }
 
   calctime = performance.now();

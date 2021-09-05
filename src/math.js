@@ -29,22 +29,6 @@ function direction(x1, y1, x2, y2) {
   return normalize(result.x, result.y);
 }
 
-function wall(x, y, radius) {
-  const result = { x: x, y: y };
-  let dx = 2;
-  let dy = -2;
-  if (x + dx > canvas.width - radius || x + dx < radius) {
-    dx = -dx;
-  }
-  if (y + dy > canvas.height - radius || y + dy < radius) {
-    dy = -dy;
-  }
-
-  result.x = dx;
-  result.y = dy;
-  return result;
-}
-
 //랜덤 스폰
 function randomspawn(radius) {
   const spawnX = Math.floor(Math.random() * (canvas.width - radius)) + radius;
@@ -53,3 +37,30 @@ function randomspawn(radius) {
 }
 
 //시간
+class Timer {
+  constructor(interval, fn, countr) {
+    this.interval = interval;
+    this.fn = fn;
+    this.countr = countr
+    this.timer = 0;
+    this.val = 2;
+  }
+  spawntime() {
+    this.timer += deltatime;
+    if (this.timer >= this.interval) {
+      this.fn();
+      this.timer = 0;
+      this.countr += 0.2;
+    }
+    if (this.countr >= this.val) {
+      if (this.val <= 1) {
+        console.log(this.interval);
+        return;
+      }
+      this.interval -= 0.86;
+      this.val -= 0.4;
+      this.countr = 0;
+      console.log(this.interval);
+    }
+  }
+}
