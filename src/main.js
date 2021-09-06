@@ -87,6 +87,20 @@ class Enemy {
     this.y += dir.y * speed;
   }
 }
+// 아이템
+class Item {
+  constructor(x,y) {
+    this.x = x;
+    this.y = y;
+    this.radius = 10;
+    this.moveSpeed = 3;
+    this.color = '#ffff00';
+  }
+  draw() {
+    drawCircle(this.x, this.y, this.radius, this.color);
+  }
+  
+}
 
 function spawnEnemy() {
   let enemy = new Enemy(0, 0);
@@ -96,10 +110,20 @@ function spawnEnemy() {
   return enemy;
 }
 
+function spawnitme() {
+  let item = new Item(0, 0);
+  let spawnPos = randomspawn(item.radius);
+  item.x = spawnPos.x;
+  item.y = spawnPos.y;
+  return item;
+}
+
 const player = new Player();
 const enemies = [];
+const items = [];
 
-const spawntime = new Timer(3, () => { enemies.push(spawnEnemy()); console.log('들어와'); }, 0)
+const spawnenemytime = new Timer(3, () => { enemies.push(spawnEnemy());}, 0)
+const spawnitmetime = new Timer(5, () => { items.push(spawnitme()); },)
 
 let deltatime = 0;
 let calctime = 0;
@@ -107,7 +131,9 @@ let savetime = 0;
 
 
 function loopGamePlay(deltatime) {
-  spawntime.spawntime();
+  spawnenemytime.spawnenemy();
+  spawnenemytime.spawnenemy();
+  spawnitmetime.spawnitem();
 
   player.processInput();
   player.draw();
@@ -117,6 +143,9 @@ function loopGamePlay(deltatime) {
     enemy.follow(player);
     enemy.draw();
   }
+  for (const item of items){
+    item.draw();
+  }
 }
 
 function loopGameOver(deltatime) {
@@ -125,7 +154,6 @@ function loopGameOver(deltatime) {
   for (const enemy of enemies) {
     enemy.draw();
   }
-
   gameOver();
 }
 
@@ -134,11 +162,12 @@ function loopGameOver(deltatime) {
   deltatime = (performance.now() - calctime) / 1000;
   gl.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (GameState.gameOver) {
+  /*if (GameState.gameOver) {
     loopGameOver(deltatime);
   } else {
     loopGamePlay(deltatime);
-  }
+  }*/
+  loopGamePlay(deltatime);
 
   calctime = performance.now();
   requestAnimationFrame(loop);

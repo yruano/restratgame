@@ -45,7 +45,7 @@ class Timer {
     this.timer = 0;
     this.val = 2;
   }
-  spawntime() {
+  spawnenemy() {
     this.timer += deltatime;
     if (this.timer >= this.interval) {
       this.fn();
@@ -54,13 +54,19 @@ class Timer {
     }
     if (this.countr >= this.val) {
       if (this.val <= 1) {
-        console.log(this.interval);
         return;
       }
       this.interval -= 0.86;
       this.val -= 0.4;
       this.countr = 0;
-      console.log(this.interval);
+    }
+  }
+  spawnitem(){
+    this.timer += deltatime;
+    if (this.timer >= this.interval) {
+      this.fn();
+      console.log(this.timer);
+      this.timer = 0;
     }
   }
 }
